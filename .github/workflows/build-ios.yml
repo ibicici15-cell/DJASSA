@@ -1,0 +1,57 @@
+name: Build iOS (Capacitor)
+
+# Se déclenche manuellement (onglet "Actions" du dépôt GitHub → ce workflow →
+# "Run workflow"), ou automatiquement à chaque push sur main si tu retires le
+# commentaire ci-dessous. Tourne sur une machine macOS fournie par GitHub —
+# aucun Mac personnel n'est nécessaire.
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Installer les dépendances
+        run: npm install
+
+      - name: Builder le site (avec les vraies clés Supabase)
+        run: npm run build
+        env:
+          # Configurés dans GitHub : Settings → Secrets and variables → Actions
+          # → New repository secret. Mêmes valeurs que ton fichier .env local.
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Ajouter la plateforme iOS (si pas déjà présente dans le dépôt)
+        run: |
+          if [ ! -d "ios" ]; then
+            npm install @capacitor/ios
+            npx cap add ios
+          fi
+
+      - name: Synchroniser Capacitor (copie le web + installe les pods)
+        run: npx cap sync ios
+
+      - name: Builder pour le simulateur iOS (non signé — vérifie juste que ça compile)
+        run: |
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace -scheme App \
+            -sdk iphonesimulator -configuration Debug \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
+
+      # Une fois que tu as un compte Apple Developer et des certificats de
+      # signature configurés en secrets GitHub, on pourra ajouter ici une
+      # étape "xcodebuild archive" + export d'un vrai .ipa installable sur un
+      # appareil ou envoyable vers TestFlight. Cette première version sert à
+      # valider que le projet compile correctement, sans les frais ni la
+      # complexité de la signature.

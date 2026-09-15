@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="gOrange" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F79157"/><stop offset="1" stop-color="#D9591C"/></linearGradient>
+    <linearGradient id="gGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F0CD7A"/><stop offset="1" stop-color="#C99420"/></linearGradient>
+    <linearGradient id="gBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8FADD9"/><stop offset="1" stop-color="#4A6FA6"/></linearGradient>
+    <linearGradient id="gGreen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6FC090"/><stop offset="1" stop-color="#2F8058"/></linearGradient>
+    <linearGradient id="gPink" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E37EA9"/><stop offset="1" stop-color="#AD3C6F"/></linearGradient>
+    <!-- Étiquette de prix réutilisable, accrochée par une ficelle -->
+    <g id="priceTag">
+      <line x1="0" y1="-10" x2="6" y2="-2" stroke="#EDE4D3" stroke-width="1.6"/>
+      <path d="M6 -2 L26 -2 Q30 -2 30 4 L30 14 Q30 20 26 20 L6 20 Q2 20 2 14 L2 4 Z" fill="#FBF8F2" stroke="#14283A" stroke-width="1.4"/>
+      <circle cx="9" cy="6" r="2" fill="#14283A"/>
+      <line x1="14" y1="6" x2="25" y2="6" stroke="#9C380A" stroke-width="2" stroke-linecap="round"/>
+      <line x1="14" y1="12" x2="21" y2="12" stroke="#9C380A" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </defs>
+
+  <!-- Smartphone, avec étiquette : en vente -->
+  <g transform="translate(70,40) rotate(-8)">
+    <rect x="0" y="0" width="46" height="82" rx="9" fill="url(#gOrange)"/>
+    <rect x="4" y="6" width="38" height="62" rx="2" fill="#14283A" opacity="0.25"/>
+    <rect x="14" y="70" width="18" height="4" rx="2" fill="#14283A" opacity="0.6"/>
+    <use href="#priceTag" transform="translate(38,74) rotate(18)"/>
+  </g>
+
+  <!-- T-shirt -->
+  <g transform="translate(190,60) rotate(6)">
+    <path d="M20 0 L0 16 L10 30 L18 24 L18 70 L52 70 L52 24 L60 30 L70 16 L50 0 Q35 12 20 0 Z" fill="url(#gGold)"/>
+  </g>
+
+  <!-- Sac, avec étiquette -->
+  <g transform="translate(460,50) rotate(5)">
+    <path d="M10 22 L10 14 Q10 4 18 4" fill="none" stroke="url(#gBlue)" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M42 22 L42 14 Q42 4 34 4" fill="none" stroke="url(#gBlue)" stroke-width="4.5" stroke-linecap="round"/>
+    <rect x="0" y="22" width="52" height="44" rx="7" fill="url(#gBlue)"/>
+    <rect x="0" y="22" width="52" height="10" rx="4" fill="#14283A" opacity="0.15"/>
+    <use href="#priceTag" transform="translate(44,50) rotate(15)"/>
+  </g>
+
+  <!-- Ampoule -->
+  <g transform="translate(700,50)">
+    <circle cx="20" cy="20" r="20" fill="url(#gGold)"/>
+    <circle cx="14" cy="14" r="6" fill="#FFF6DE" opacity="0.5"/>
+    <rect x="12" y="38" width="16" height="10" rx="3" fill="#14283A" opacity="0.6"/>
+  </g>
+
+  <!-- Grande étiquette (élément fort : symbolise "à vendre") -->
+  <g transform="translate(790,165) rotate(-12)">
+    <path d="M0 24 L24 0 L64 0 L64 40 L24 64 Z" fill="#FBF8F2" stroke="#14283A" stroke-width="1.8"/>
+    <circle cx="16" cy="16" r="6" fill="#14283A"/>
+    <line x1="30" y1="14" x2="56" y2="14" stroke="#9C380A" stroke-width="3" stroke-linecap="round"/>
+    <line x1="30" y1="24" x2="50" y2="24" stroke="#9C380A" stroke-opacity="0.5" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Livre -->
+  <g transform="translate(900,40) rotate(8)">
+    <path d="M0 4 L28 0 L28 60 L0 64 Z" fill="url(#gGreen)"/>
+    <path d="M28 0 L56 4 L56 64 L28 60 Z" fill="#245B41"/>
+  </g>
+
+  <!-- Casque audio -->
+  <g transform="translate(1000,190) rotate(-5)">
+    <path d="M2 40 L2 26 Q2 0 30 0 Q58 0 58 26 L58 40" fill="none" stroke="url(#gPink)" stroke-width="4.5" stroke-linecap="round"/>
+    <rect x="-4" y="36" width="16" height="24" rx="5" fill="url(#gPink)"/>
+    <rect x="50" y="36" width="16" height="24" rx="5" fill="url(#gPink)"/>
+  </g>
+
+  <!-- Voiture, avec étiquette -->
+  <g transform="translate(300,195) rotate(-4)">
+    <path d="M4 34 L14 12 Q20 4 32 4 L64 4 Q76 4 82 12 L92 34 Z" fill="url(#gBlue)"/>
+    <path d="M20 14 L28 8 L58 8 L66 14 Z" fill="#DCE8F7" opacity="0.5"/>
+    <rect x="0" y="34" width="96" height="18" rx="4" fill="url(#gBlue)"/>
+    <circle cx="22" cy="54" r="9" fill="#14283A"/>
+    <circle cx="74" cy="54" r="9" fill="#14283A"/>
+    <use href="#priceTag" transform="translate(88,20) rotate(20)"/>
+  </g>
+
+  <!-- Canapé -->
+  <g transform="translate(570,205) rotate(-3)">
+    <path d="M0 30 L0 14 Q0 4 10 4 L14 4 Q20 4 20 14 L20 26 L70 26 L70 14 Q70 4 76 4 L80 4 Q90 4 90 14 L90 30 L90 55 L0 55 Z" fill="url(#gOrange)"/>
+    <rect x="0" y="30" width="90" height="8" fill="#14283A" opacity="0.12"/>
+    <rect x="2" y="55" width="6" height="10" fill="#14283A" opacity="0.7"/>
+    <rect x="82" y="55" width="6" height="10" fill="#14283A" opacity="0.7"/>
+  </g>
+
+  <!-- Clé à molette -->
+  <g transform="translate(1080,55) rotate(-25)">
+    <path d="M0 10 Q0 0 10 0 Q20 0 20 10 Q20 16 14 18 L14 60 L6 60 L6 18 Q0 16 0 10 Z" fill="url(#gGold)"/>
+  </g>
+
+  <!-- Chaussure -->
+  <g transform="translate(150,300) rotate(2)">
+    <path d="M0 30 Q0 10 20 10 Q26 10 30 4 Q34 0 40 4 L58 16 Q66 20 66 28 L66 34 L0 34 Z" fill="url(#gGreen)"/>
+    <path d="M0 34 L66 34 L66 30 L2 30 Z" fill="#FBF8F2" opacity="0.4"/>
+  </g>
+
+  <!-- Casquette -->
+  <g transform="translate(400,300)">
+    <path d="M0 20 Q20 0 40 20 L40 24 L0 24 Z" fill="url(#gPink)"/>
+    <path d="M40 16 L60 20 L40 24 Z" fill="url(#gPink)"/>
+  </g>
+
+  <!-- Vélo -->
+  <g transform="translate(650,300) rotate(-2)">
+    <circle cx="14" cy="30" r="14" fill="none" stroke="url(#gOrange)" stroke-width="4"/>
+    <circle cx="74" cy="30" r="14" fill="none" stroke="url(#gOrange)" stroke-width="4"/>
+    <path d="M14 30 L34 10 L54 10 L74 30 M34 10 L44 30 L14 30 M44 30 L74 30" fill="none" stroke="url(#gOrange)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Tasse -->
+  <g transform="translate(950,290) rotate(4)">
+    <path d="M0 6 L36 6 L34 40 Q34 48 24 48 L12 48 Q2 48 2 40 Z" fill="url(#gBlue)"/>
+    <path d="M36 12 Q50 12 50 24 Q50 36 36 34 Z" fill="none" stroke="url(#gBlue)" stroke-width="5"/>
+  </g>
+
+</svg>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MonDjassa</string>
+    <string name="title_activity_main">MonDjassa</string>
+    <string name="package_name">ci.mondjassa.app</string>
+    <string name="custom_url_scheme">ci.mondjassa.app</string>
+</resources>
