@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "623783526355",
+    "project_id": "djassa-ac25f",
+    "storage_bucket": "djassa-ac25f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623783526355:android:55696fecb256ee04c7b926",
+        "android_client_info": {
+          "package_name": "Djassa.market"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5daJ0WjYRGtbMDs8xTt2VbObKP3zzevo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

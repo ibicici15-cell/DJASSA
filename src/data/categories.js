@@ -145,14 +145,28 @@ export const CATEGORIES = [
   },
   {
     id: "agriculture",
-    label: "Agriculture & Élevage",
+    label: "Agriculture, Élevage & Produits locaux",
     icon: "agriculture",
     color: { bg: "#F0F5D9", fg: "#6B7F1E" },
-    // Volontairement sans les récoltes/produits comestibles (céréales, fruits,
-    // légumes...) : c'est de la nourriture, hors périmètre de la plateforme.
-    subcategories: ["Matériel agricole", "Tracteurs", "Motopompes", "Machines agricoles", "Outils", "Semences", "Plants", "Bovins", "Ovins", "Caprins", "Volaille", "Poissons", "Matériel d'élevage", "Autre"],
+    // Nourriture autorisée UNIQUEMENT sous cette forme précise : animaux
+    // vivants (élevage/chasse, halal) et récoltes BRUTES non transformées
+    // (pas de plats cuisinés, pas de produits déjà préparés/cuits — trop
+    // difficile à contrôler côté fraîcheur/salubrité pour rester sur la
+    // plateforme). Un sac de manioc ou une volaille vivante, oui ; un plat à
+    // emporter, non.
+    subcategories: [
+      "Matériel agricole", "Tracteurs", "Motopompes", "Machines agricoles", "Outils", "Semences", "Plants",
+      "Bovins", "Ovins", "Caprins", "Volaille", "Poissons", "Gibier / Animaux de chasse", "Matériel d'élevage",
+      "Banane plantain", "Manioc", "Igname", "Maïs", "Riz", "Arachide", "Piment", "Tomate", "Gombo", "Aubergine locale", "Patate douce", "Taro",
+      "Autre",
+    ],
     fields: [
-      sousCategorieField(["Matériel agricole", "Tracteurs", "Motopompes", "Machines agricoles", "Outils", "Semences", "Plants", "Bovins", "Ovins", "Caprins", "Volaille", "Poissons", "Matériel d'élevage", "Autre"]),
+      sousCategorieField([
+        "Matériel agricole", "Tracteurs", "Motopompes", "Machines agricoles", "Outils", "Semences", "Plants",
+        "Bovins", "Ovins", "Caprins", "Volaille", "Poissons", "Gibier / Animaux de chasse", "Matériel d'élevage",
+        "Banane plantain", "Manioc", "Igname", "Maïs", "Riz", "Arachide", "Piment", "Tomate", "Gombo", "Aubergine locale", "Patate douce", "Taro",
+        "Autre",
+      ]),
     ],
   },
   {

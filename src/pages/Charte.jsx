@@ -6,8 +6,10 @@ export default function Charte() {
       <p className="text-encre-700/80 mb-6 leading-relaxed">
         MonDjassa est une plateforme de petites annonces entre particuliers en Côte d'Ivoire,
         pensée pour rester conforme aux valeurs halal. Elle ne couvre pas l'immobilier (terrains,
-        maisons, appartements) ni l'alimentation (produits périssables). Le mobilier et les
-        accessoires de maison (tables, chaises, décoration...) restent en revanche autorisés.
+        maisons, appartements). Côté alimentation, seuls les <b>animaux vivants</b> (élevage, gibier,
+        halal) et les <b>récoltes brutes non transformées</b> (manioc, banane plantain, igname,
+        piment...) sont autorisés — aucun plat cuisiné ni produit déjà préparé. Le mobilier et les
+        accessoires de maison (tables, chaises, décoration...) restent également autorisés.
       </p>
 
       <h2 className="font-display text-xl mb-3">Articles et activités strictement interdits</h2>
