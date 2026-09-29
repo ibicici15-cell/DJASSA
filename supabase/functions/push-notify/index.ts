@@ -91,7 +91,7 @@ async function getAccessToken(): Promise<string> {
   return cachedToken.value;
 }
 
-async function sendPush(userId: string, title: string, body: string, data: Record<string, string> = {}) {
+async function sendPush(userId: string, title: string, body: string, data: Record<string, string> = {}): Promise<string> {
   const { data: profile } = await supabase
     .from("profiles")
     .select('"pushToken"')
@@ -99,7 +99,7 @@ async function sendPush(userId: string, title: string, body: string, data: Recor
     .maybeSingle();
 
   const token = profile?.pushToken;
-  if (!token) return; // pas d'app mobile / push non activé
+  if (!token) return "aucun pushToken pour ce destinataire"; // pas d'app mobile / push non activé
 
   try {
     const serviceAccount = JSON.parse(Deno.env.get("FCM_SERVICE_ACCOUNT")!);
@@ -122,9 +122,15 @@ async function sendPush(userId: string, title: string, body: string, data: Recor
         }),
       }
     );
-    if (!res.ok) console.log("[push] échec d'envoi FCM :", await res.text());
+    if (!res.ok) {
+      const txt = await res.text();
+      console.log("[push] échec d'envoi FCM :", txt);
+      return "FCM " + res.status + " : " + txt.slice(0, 300);
+    }
+    return "envoyé";
   } catch (err) {
     console.log("[push] erreur d'envoi :", err);
+    return "erreur : " + String(err).slice(0, 300);
   }
 }
 
@@ -134,6 +140,7 @@ Deno.serve(async (req) => {
   try {
     const payload = await req.json();
     const { type, table, record, old_record } = payload;
+    let result = "ignoré (aucune condition remplie)";
 
     if (table === "messages" && type === "INSERT") {
       const { data: conversation } = await supabase
@@ -148,7 +155,7 @@ Deno.serve(async (req) => {
           .select("nom")
           .eq("id", record.fromUser)
           .maybeSingle();
-        await sendPush(
+        result = await sendPush(
           recipientId,
           "Nouveau message de " + (sender?.nom || ""),
           String(record.text || "").slice(0, 80),
@@ -158,11 +165,11 @@ Deno.serve(async (req) => {
     } else if (table === "subscriptionRequests" && type === "UPDATE") {
       if (record.status !== old_record?.status) {
         if (record.status === "validee") {
-          await sendPush(record.user, "Abonnement activé ✓", "Votre demande d'abonnement a été validée.", {
+          result = await sendPush(record.user, "Abonnement activé ✓", "Votre demande d'abonnement a été validée.", {
             type: "subscription",
           });
         } else if (record.status === "refusee") {
-          await sendPush(record.user, "Demande refusée", "Votre demande d'abonnement a été refusée.", {
+          result = await sendPush(record.user, "Demande refusée", "Votre demande d'abonnement a été refusée.", {
             type: "subscription",
           });
         }
@@ -170,19 +177,19 @@ Deno.serve(async (req) => {
     } else if (table === "boostRequests" && type === "UPDATE") {
       if (record.status !== old_record?.status) {
         if (record.status === "validee") {
-          await sendPush(record.user, "Boost activé ✓", "Votre annonce est maintenant en avant.", {
+          result = await sendPush(record.user, "Boost activé ✓", "Votre annonce est maintenant en avant.", {
             type: "boost",
             listingId: record.listing,
           });
         } else if (record.status === "refusee") {
-          await sendPush(record.user, "Demande refusée", "Votre demande de boost a été refusée.", {
+          result = await sendPush(record.user, "Demande refusée", "Votre demande de boost a été refusée.", {
             type: "boost",
           });
         }
       }
     }
 
-    return new Response(JSON.stringify({ ok: true }), { headers: { "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ ok: true, push: result }), { headers: { "Content-Type": "application/json" } });
   } catch (err) {
     console.log("[push-notify] erreur :", err);
     return new Response(JSON.stringify({ ok: false, error: String(err) }), {

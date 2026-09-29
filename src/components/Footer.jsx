@@ -1,10 +1,37 @@
 import { Link } from "react-router-dom";
+import { Capacitor } from "@capacitor/core";
 import { CATEGORIES } from "../data/categories";
 import { PAYMENT_INSTRUCTIONS } from "../data/plans";
 import AppLogo from "./AppLogo";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+
+  // Version compacte pour l'app Android : pas de liste de catégories ni de
+  // numéros de paiement (déjà accessibles dans l'app), juste l'essentiel.
+  if (Capacitor.isNativePlatform()) {
+    return (
+      <footer className="bg-encre-950 text-sable-100/80 mt-10 px-5 py-6 text-center">
+        <p className="font-display text-lg text-sable-50 flex items-center justify-center gap-2 mb-3">
+          <AppLogo size={22} />
+          <span>Mon<span className="text-ocre-400">Djassa</span></span>
+        </p>
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs mb-3">
+          <Link to="/annonces" className="hover:text-sable-50">Annonces</Link>
+          <Link to="/publier" className="hover:text-sable-50">Publier</Link>
+          <Link to="/abonnement#offres" className="hover:text-sable-50">Abonnements & Boost</Link>
+          <Link to="/messages?agence=1" className="text-ocre-400 font-medium">Écrire à l'agence</Link>
+        </div>
+        <p className="text-[10px] leading-snug text-sable-100/40 mb-3">
+          MonDjassa met en relation des particuliers et n'intervient pas dans les transactions.
+          Vérifiez l'article avant de payer et privilégiez la remise en main propre.
+        </p>
+        <p className="text-[10px] text-sable-100/40">
+          © {year} MonDjassa · Fait avec soin pour la Côte d'Ivoire 🇨🇮
+        </p>
+      </footer>
+    );
+  }
 
   return (
     <footer className="bg-encre-950 text-sable-100/80 mt-20">
@@ -69,7 +96,7 @@ export default function Footer() {
       <div className="border-t border-encre-700/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-sable-100/40">
           <p>© {year} MonDjassa. Tous droits réservés.</p>
-          <p>Fait avec soin en Côte d'Ivoire 🇨🇮</p>
+          <p>Fait avec soin pour la Côte d'Ivoire 🇨🇮</p>
         </div>
       </div>
     </footer>
