@@ -199,14 +199,14 @@ export default function AdminDashboard() {
                           setSubRequests((prev) => prev.map((x) => x.id === r.id ? { ...x, status: "validee" } : x));
                           setUsers((prev) => prev.map((u2) => u2.id === r.user ? { ...u2, plan: r.planId, planActive: true } : u2));
                         })}
-                        className="bg-indigo-500 text-sable-50 px-3 py-1.5 rounded text-sm disabled:opacity-50">
+                        className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm disabled:opacity-50 transition-colors">
                         {busyId === r.id ? "..." : "Activer"}
                       </button>
                       <button disabled={busyId === r.id}
                         onClick={() => run(r.id, () => rejectSubscriptionRequest(r), () => {
                           setSubRequests((prev) => prev.map((x) => x.id === r.id ? { ...x, status: "refusee" } : x));
                         })}
-                        className="border border-encre-700/30 px-3 py-1.5 rounded text-sm disabled:opacity-50">
+                        className="border border-red-300 text-red-600 hover:bg-red-50 px-3 py-1.5 rounded text-sm disabled:opacity-50 transition-colors">
                         Refuser
                       </button>
                     </div>
@@ -237,14 +237,14 @@ export default function AdminDashboard() {
                           setBoostRequests((prev) => prev.map((x) => x.id === r.id ? { ...x, status: "validee" } : x));
                           setListings((prev) => prev.map((x) => x.id === r.listing ? { ...x, boostedUntil: until } : x));
                         })}
-                        className="bg-or-500 text-encre-950 px-3 py-1.5 rounded text-sm disabled:opacity-50">
+                        className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm disabled:opacity-50 transition-colors">
                         {busyId === r.id ? "..." : "Activer"}
                       </button>
                       <button disabled={busyId === r.id}
                         onClick={() => run(r.id, () => rejectBoostRequest(r), () => {
                           setBoostRequests((prev) => prev.map((x) => x.id === r.id ? { ...x, status: "refusee" } : x));
                         })}
-                        className="border border-encre-700/30 px-3 py-1.5 rounded text-sm disabled:opacity-50">
+                        className="border border-red-300 text-red-600 hover:bg-red-50 px-3 py-1.5 rounded text-sm disabled:opacity-50 transition-colors">
                         Refuser
                       </button>
                     </div>

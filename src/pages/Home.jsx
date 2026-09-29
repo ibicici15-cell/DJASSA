@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Search, ShieldCheck } from "lucide-react";
+import { Capacitor } from "@capacitor/core";
+import { HOW_IT_WORKS_STEPS } from "../data/howItWorks";
 import { CATEGORIES } from "../data/categories";
 import { CategoryBadge } from "../data/categoryIcons";
 import { getPlatformStats, searchListings, toggleFavorite, listenFavorites } from "../lib/listings";
@@ -93,14 +95,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
-        <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 gap-4 sm:gap-5">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-12">
+        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-7 gap-x-2 gap-y-3 sm:gap-5">
           {CATEGORIES.map((c) => (
-            <Link key={c.id} to={`/annonces?categorie=${c.id}`} className="flex flex-col items-center text-center gap-2 group">
+            <Link key={c.id} to={`/annonces?categorie=${c.id}`} className="flex flex-col items-center text-center gap-1 sm:gap-2 group">
               <div className="group-hover:-translate-y-0.5 transition-transform">
-                <CategoryBadge id={c.id} size={64} iconSize={26} />
+                <CategoryBadge id={c.id} size={48} iconSize={20} />
               </div>
-              <span className="text-xs sm:text-sm leading-tight text-encre-900">{c.label}</span>
+              <span className="text-[10px] sm:text-sm leading-tight text-encre-900 line-clamp-2">{c.label}</span>
             </Link>
           ))}
         </div>
@@ -120,26 +122,25 @@ export default function Home() {
         </section>
       )}
 
-      <section className="bg-white border-t border-encre-950/5 py-10 sm:py-14">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <h2 className="font-display font-semibold text-lg sm:text-xl mb-8 text-center">Comment ça marche</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {[
-              { n: "1", title: "Publiez ou parcourez", text: "Créez un compte gratuit et publiez votre article en quelques minutes, ou parcourez les annonces disponibles." },
-              { n: "2", title: "Échangez en toute confiance", text: "Contactez directement le vendeur par message ou téléphone, et consultez son profil et ses avis." },
-              { n: "3", title: "Concluez", text: "Retrouvez-vous, vérifiez l'article et finalisez l'échange directement avec l'autre partie — sans intermédiaire ni commission cachée." },
-            ].map((step) => (
-              <div key={step.n} className="text-center">
-                <div className="w-9 h-9 rounded-full bg-indigo-500 text-sable-50 font-display font-semibold text-base flex items-center justify-center mx-auto mb-3">
-                  {step.n}
+      {/* Masqué dans l'app Android : remplacé par l'intro HowItWorksIntro à l'ouverture. */}
+      {!Capacitor.isNativePlatform() && (
+        <section className="bg-white border-t border-encre-950/5 py-10 sm:py-14">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <h2 className="font-display font-semibold text-lg sm:text-xl mb-8 text-center">Comment ça marche</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {HOW_IT_WORKS_STEPS.map((step) => (
+                <div key={step.n} className="text-center">
+                  <div className="w-9 h-9 rounded-full bg-indigo-500 text-sable-50 font-display font-semibold text-base flex items-center justify-center mx-auto mb-3">
+                    {step.n}
+                  </div>
+                  <h3 className="font-display font-semibold text-base mb-1">{step.title}</h3>
+                  <p className="text-sm text-encre-700/70">{step.text}</p>
                 </div>
-                <h3 className="font-display font-semibold text-base mb-1">{step.title}</h3>
-                <p className="text-sm text-encre-700/70">{step.text}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }

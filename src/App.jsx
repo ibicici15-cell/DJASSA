@@ -1,8 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Capacitor } from "@capacitor/core";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ToastProvider } from "./contexts/ToastContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import BottomNav from "./components/BottomNav";
+import HowItWorksIntro from "./components/HowItWorksIntro";
 import NotificationsWatcher from "./components/NotificationsWatcher";
 import { RequireAdmin, RequireAuth } from "./components/RouteGuards";
 
@@ -28,8 +31,9 @@ export default function App() {
       <ToastProvider>
       <BrowserRouter>
         <NotificationsWatcher />
+        <HowItWorksIntro />
         <Navbar />
-        <main className="min-h-[80vh]">
+        <main className={"min-h-[80vh]"}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/charte" element={<Charte />} />
@@ -49,7 +53,15 @@ export default function App() {
             <Route path="/admin" element={<RequireAdmin><AdminDashboard /></RequireAdmin>} />
           </Routes>
         </main>
-        <Footer />
+        {Capacitor.isNativePlatform() ? (
+          <>
+            {/* pb-16 : laisse la place à la barre du bas (fixe, h-16) sous le footer */}
+            <div className="pb-16"><Footer /></div>
+            <BottomNav />
+          </>
+        ) : (
+          <Footer />
+        )}
       </BrowserRouter>
     </ToastProvider>
     </AuthProvider>

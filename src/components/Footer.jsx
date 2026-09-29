@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { CATEGORIES } from "../data/categories";
 import { PAYMENT_INSTRUCTIONS } from "../data/plans";
-import { ShoppingBag } from "lucide-react";
+import AppLogo from "./AppLogo";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -11,12 +11,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-6">
         <div className="col-span-2 sm:col-span-1">
           <p className="font-display text-2xl text-sable-50 mb-3 flex items-center gap-2">
-            <span
-              className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
-              style={{ background: "linear-gradient(90deg, #F77F00 0%, #F77F00 33%, #FFFFFF 33%, #FFFFFF 66%, #009E60 66%, #009E60 100%)" }}
-            >
-              <ShoppingBag className="w-4 h-4 text-encre-950" strokeWidth={2} />
-            </span>
+            <AppLogo size={28} />
             <span>Mon<span className="text-ocre-400">Djassa</span></span>
           </p>
           <p className="text-sm text-sable-100/60 leading-relaxed">

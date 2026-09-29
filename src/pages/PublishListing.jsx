@@ -176,11 +176,11 @@ export default function PublishListing({ editMode = false }) {
             {CATEGORIES.map((c) => (
               <button key={c.id} type="button"
                 onClick={() => { setCategorie(c.id); setSpecific({}); }}
-                className={`fiche rounded p-4 flex items-center gap-3 hover:border-ocre-500 transition-colors ${categorie === c.id ? "border-ocre-500 ring-1 ring-ocre-500 bg-ocre-500/5" : ""}`}>
-                <div className="w-9 h-9 shrink-0 rounded-full bg-ocre-500/10 text-ocre-600 flex items-center justify-center">
-                  <CategoryIcon id={c.id} className="w-5 h-5" />
+                className={`fiche rounded p-3 sm:p-4 flex items-center gap-2 sm:gap-3 hover:border-ocre-500 transition-colors min-w-0 ${categorie === c.id ? "border-ocre-500 ring-1 ring-ocre-500 bg-ocre-500/5" : ""}`}>
+                <div className="w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-full bg-ocre-500/10 text-ocre-600 flex items-center justify-center">
+                  <CategoryIcon id={c.id} className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
-                <span className="font-display block">{c.label}</span>
+                <span className="font-display text-xs sm:text-sm leading-tight text-left break-words min-w-0">{c.label}</span>
               </button>
             ))}
           </div>

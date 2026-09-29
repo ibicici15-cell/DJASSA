@@ -1,22 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="192" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#1A1C2E"/>
-      <stop offset="1" stop-color="#12131F"/>
-    </linearGradient>
-    <linearGradient id="bag" x1="46" y1="75" x2="146" y2="156" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#E4A13E"/>
-      <stop offset="1" stop-color="#A66418"/>
-    </linearGradient>
-  </defs>
-  <rect width="192" height="192" rx="42" fill="url(#bg)"/>
-  <path d="M 67 78 L 67 64 C 67 53 74 44 82 44" fill="none" stroke="#D6A94F" stroke-width="7.5" stroke-linecap="round"/>
-  <path d="M 125 78 L 125 64 C 125 53 118 44 110 44" fill="none" stroke="#D6A94F" stroke-width="7.5" stroke-linecap="round"/>
-  <path d="M 44 75 L 148 75 L 139 148 C 138 155 132 160 125 160 L 67 160 C 60 160 54 155 53 148 Z"
-        fill="url(#bag)" stroke="#12131F" stroke-width="3.2" stroke-linejoin="round"/>
-  <line x1="54.5" y1="92" x2="137.5" y2="92" stroke="#12131F" stroke-opacity="0.2" stroke-width="2.8"/>
-  <g transform="translate(114,117) rotate(20)">
-    <rect x="-10.5" y="-8" width="21" height="16" rx="3.5" fill="#12131F"/>
-    <circle cx="4.6" cy="0" r="2.4" fill="#F2EAD9"/>
+  <rect width="192" height="192" rx="42" fill="#14283A"/>
+  <path d="M 67 78 L 67 64 C 67 53 74 44 82 44" fill="none" stroke="#EDE4D3" stroke-width="7.5" stroke-linecap="round"/>
+  <path d="M 125 78 L 125 64 C 125 53 118 44 110 44" fill="none" stroke="#EDE4D3" stroke-width="7.5" stroke-linecap="round"/>
+  <defs><clipPath id="bagclip"><path d="M 44 75 L 148 75 L 139 148 C 138 155 132 160 125 160 L 67 160 C 60 160 54 155 53 148 Z"/></clipPath></defs>
+  <g clip-path="url(#bagclip)">
+    <rect x="44" y="75" width="35" height="90" fill="#F77F00"/>
+    <rect x="79" y="75" width="35" height="90" fill="#FFFFFF"/>
+    <rect x="114" y="75" width="35" height="90" fill="#009E60"/>
   </g>
+  <path d="M 44 75 L 148 75 L 139 148 C 138 155 132 160 125 160 L 67 160 C 60 160 54 155 53 148 Z" fill="none" stroke="#14283A" stroke-width="3.2"/>
 </svg>

@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { Capacitor } from "@capacitor/core";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -9,11 +10,13 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
   );
 }
 
-// persistSession: false reproduit le comportement de l'ancien BaseAuthStore
-// PocketBase en mémoire : l'utilisateur est déconnecté à chaque rechargement
-// complet de la page (F5). Mettre à true pour une session qui survit au reload.
+// Sur le site web : persistSession=false reproduit le comportement "déconnecté
+// au rechargement" voulu au départ. Sur l'app Android (native) : une app
+// mobile qui déconnecte à chaque fermeture est une mauvaise expérience
+// inhabituelle — on garde donc la session entre les ouvertures de l'app.
+const isNative = Capacitor.isNativePlatform();
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth: { persistSession: false, autoRefreshToken: true, detectSessionInUrl: true },
+  auth: { persistSession: isNative, autoRefreshToken: true, detectSessionInUrl: true },
 });
 
 // Équivalent de pb.files.getURL(record, filename, { thumb }) : renvoie l'URL

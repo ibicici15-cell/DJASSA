@@ -170,7 +170,7 @@ create table public.listings (
   owner uuid not null references public.profiles(id) on delete cascade,
   categorie text not null check (categorie in (
     'vehicules','electronique','maison','mode','enfants','livres','emploi',
-    'services','agriculture','commerce','islamique','sport','artisanat','beaute','divers'
+    'services','agriculture','commerce','sport','artisanat','beaute','divers'
   )),
   transaction text not null check (transaction in ('vente','location')),
   titre text not null,

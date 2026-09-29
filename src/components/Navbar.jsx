@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Capacitor } from "@capacitor/core";
 import { useAuth } from "../contexts/AuthContext";
 import { listenUnreadCount, listenMyListings, listenFavorites } from "../lib/listings";
 import { isAtLeastAdmin } from "../lib/roles";
 import { CATEGORIES } from "../data/categories";
 import { CategoryIcon } from "../data/categoryIcons";
-import { ShoppingBag, Menu, X, Search, User, ChevronDown } from "lucide-react";
+import { Menu, X, Search, User, ChevronDown } from "lucide-react";
+import AppLogo from "./AppLogo";
+
+const isNative = Capacitor.isNativePlatform();
 
 export default function Navbar() {
   const { user, profile, logout } = useAuth();
@@ -46,14 +50,35 @@ export default function Navbar() {
     navigate("/");
   }
 
+  // App Android : barre du haut minimale (logo + recherche). Tout le reste de
+  // la navigation (annonces, publier, messages, compte) vit dans BottomNav —
+  // pas de menu burger, pas de double liste de liens.
+  if (isNative) {
+    return (
+      <header className="sticky top-0 z-30 bg-sable-50/95 backdrop-blur border-b border-encre-950/10">
+        <div className="px-4 h-14 flex items-center gap-3">
+          <Link to="/" className="shrink-0">
+            <AppLogo size={32} />
+          </Link>
+          <form onSubmit={handleSearch} className="flex-1 flex items-center bg-white border border-encre-950/15 rounded-full pl-3 pr-1 py-1 min-w-0">
+            <Search className="w-4 h-4 text-encre-700/40 shrink-0" />
+            <input
+              value={q} onChange={(e) => setQ(e.target.value)}
+              placeholder="Rechercher..."
+              className="flex-1 min-w-0 bg-transparent px-2 py-1.5 text-sm outline-none"
+            />
+          </form>
+        </div>
+      </header>
+    );
+  }
+
   return (
     <header className="sticky top-0 z-30 bg-sable-50/95 backdrop-blur border-b border-encre-950/10">
       {/* Ligne 1 : logo, recherche, compte — tout ce qui concerne l'utilisateur vit ici */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
         <Link to="/" className="font-display text-xl tracking-tight flex items-center gap-2 shrink-0" onClick={closeMenu}>
-          <span className="w-8 h-8 rounded-lg bg-encre-950 flex items-center justify-center shrink-0">
-            <ShoppingBag className="w-4.5 h-4.5 text-ocre-400" strokeWidth={2} />
-          </span>
+          <AppLogo size={32} />
           <span className="hidden sm:inline">Mon<span className="text-ocre-500">Djassa</span></span>
         </Link>
 

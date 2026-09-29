@@ -75,11 +75,12 @@ export default function MyListings() {
         {active.map((l) => {
           const boosted = l.boostedUntil && new Date(l.boostedUntil).getTime() > Date.now();
           return (
-            <div key={l.id} className="fiche rounded p-4 flex items-center gap-4">
-              <div className="w-20 h-20 bg-encre-800 rounded overflow-hidden shrink-0">
-                {l.photos?.[0] && <img src={listingPhotoUrl(l.photos[0])} className="w-full h-full object-cover" />}
-              </div>
-              <div className="flex-1 min-w-0">
+            <div key={l.id} className="fiche rounded p-4 flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex gap-4 min-w-0">
+                <div className="w-20 h-20 bg-encre-800 rounded overflow-hidden shrink-0">
+                  {l.photos?.[0] && <img src={listingPhotoUrl(l.photos[0])} className="w-full h-full object-cover" />}
+                </div>
+                <div className="flex-1 min-w-0">
                 <p className="font-display text-lg truncate">{l.titre}</p>
                 <p className="text-sm text-encre-700/60">{l.ville} · {Number(l.prix).toLocaleString("fr-FR")} FCFA</p>
                 <p className="flex items-center gap-3 text-xs text-encre-700/50 mt-0.5">
@@ -103,12 +104,13 @@ export default function MyListings() {
                     <Link to="/messages?agence=1" className="underline font-medium">Contacter l'agence</Link> pour plus de détails.
                   </p>
                 )}
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2 shrink-0 text-sm items-center">
+              <div className="flex flex-wrap gap-2 text-sm items-center sm:shrink-0">
                 <select value={l.status} disabled={l.status === "suspendu" || l.removedByAdmin}
                   onChange={(e) => handleStatusChange(l.id, e.target.value)}
                   title={l.status === "suspendu" ? "Statut géré par l'administrateur" : "Changer le statut"}
-                  className="border border-encre-700/30 rounded px-2 py-1.5 bg-sable-50 text-sm disabled:opacity-50">
+                  className="border border-encre-700/30 rounded px-2 py-1.5 bg-sable-50 text-sm disabled:opacity-50 min-w-0">
                   <option value="disponible">Disponible</option>
                   <option value={l.transaction === "location" ? "loue" : "vendu"}>
                     {l.transaction === "location" ? "Loué" : "Vendu"}

@@ -81,6 +81,20 @@ export const CATEGORIES = [
     label: "Maison & Ameublement",
     icon: "maison",
     color: { bg: "#E1F8EC", fg: "#2F8F5B" },
+    // Idée mise de côté pour l'instant : compléter cette catégorie avec
+    // l'immobilier (terrains, maisons, villas, appartements, studios, locaux
+    // commerciaux, bureaux) au lieu d'une nouvelle catégorie à part, plus un
+    // champ "superficie". Décommenter/reprendre ce qui suit si on veut la
+    // réactiver plus tard :
+    //
+    // subcategories: ["Terrains", "Maisons", "Villas", "Appartements", "Studios", "Locaux commerciaux", "Bureaux", "Canapés", ...(+ le reste des meubles ci-dessous), "Autre"],
+    // fields: [
+    //   sousCategorieField([...mêmes options que ci-dessus...]),
+    //   { name: "superficie", label: "Superficie (m², si terrain/bien immobilier)", type: "number" },
+    //   { name: "matiere", label: "Matière (si meuble)", type: "text" },
+    //   { name: "dimensions", label: "Dimensions", type: "text" },
+    //   ...
+    // ],
     subcategories: ["Canapés", "Fauteuils", "Tables", "Chaises", "Lits", "Matelas", "Armoires", "Commodes", "Bibliothèques", "Meubles TV", "Meubles de cuisine", "Meubles de salle de bain", "Bureaux", "Étagères", "Meubles de rangement", "Luminaires", "Lampes", "Rideaux", "Tapis", "Décoration", "Miroirs", "Vaisselle", "Ustensiles de cuisine", "Articles ménagers", "Électroménager", "Réfrigérateurs", "Congélateurs", "Cuisinières", "Machines à laver", "Ventilateurs", "Climatiseurs", "Matériel de bricolage", "Autre"],
     fields: [
       sousCategorieField(["Canapés", "Fauteuils", "Tables", "Chaises", "Lits", "Matelas", "Armoires", "Commodes", "Bibliothèques", "Meubles TV", "Meubles de cuisine", "Meubles de salle de bain", "Bureaux", "Étagères", "Meubles de rangement", "Luminaires", "Lampes", "Rideaux", "Tapis", "Décoration", "Miroirs", "Vaisselle", "Ustensiles de cuisine", "Articles ménagers", "Électroménager", "Réfrigérateurs", "Congélateurs", "Cuisinières", "Machines à laver", "Ventilateurs", "Climatiseurs", "Matériel de bricolage", "Autre"]),
@@ -177,16 +191,6 @@ export const CATEGORIES = [
     subcategories: ["Matériel de magasin", "Matériel de bureau", "Machines professionnelles", "Machines industrielles", "Stocks / déstockage", "Fournitures professionnelles", "Emballages", "Matériel de restauration", "Matériel événementiel", "Équipements de chantier", "Autre"],
     fields: [
       sousCategorieField(["Matériel de magasin", "Matériel de bureau", "Machines professionnelles", "Machines industrielles", "Stocks / déstockage", "Fournitures professionnelles", "Emballages", "Matériel de restauration", "Matériel événementiel", "Équipements de chantier", "Autre"]),
-    ],
-  },
-  {
-    id: "islamique",
-    label: "Produits islamiques",
-    icon: "islamique",
-    color: { bg: "#DFF4EC", fg: "#1F7A5C" },
-    subcategories: ["Corans", "Livres islamiques", "Tapis de prière", "Hijabs", "Abayas", "Vêtements islamiques", "Chapelets", "Articles pour mosquées", "Accessoires religieux", "Autre"],
-    fields: [
-      sousCategorieField(["Corans", "Livres islamiques", "Tapis de prière", "Hijabs", "Abayas", "Vêtements islamiques", "Chapelets", "Articles pour mosquées", "Accessoires religieux", "Autre"]),
     ],
   },
   {

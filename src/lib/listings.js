@@ -152,6 +152,11 @@ export async function getListing(listingId) {
   return data ? normalizeListing(data) : null;
 }
 
+export async function getUserName(userId) {
+  const { data } = await supabase.from("profiles").select("nom").eq("id", userId).maybeSingle();
+  return data?.nom || null;
+}
+
 export function listenMyListings(userId, cb) {
   let cancelled = false;
   async function refresh() {

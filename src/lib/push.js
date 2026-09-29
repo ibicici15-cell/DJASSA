@@ -6,28 +6,26 @@ export function isNativePlatform() {
   return Capacitor.isNativePlatform();
 }
 
-// À appeler une fois l'utilisateur connecté (ex: dans NotificationsWatcher).
-// Demande la permission, récupère le token FCM de l'appareil, et l'enregistre
-// sur le compte pour que l'Edge Function push-notify puisse l'utiliser.
-export async function registerPushNotifications(userId) {
-  if (!isNativePlatform() || !userId) return;
+let listenersReady = false;
+let currentUserId = null;
 
-  const perm = await PushNotifications.checkPermissions();
-  if (perm.receive !== "granted") {
-    const req = await PushNotifications.requestPermissions();
-    if (req.receive !== "granted") return; // l'utilisateur a refusé
-  }
-
-  await PushNotifications.register();
+// Les listeners ne doivent être ajoutés qu'UNE fois, et AVANT register() :
+// sinon l'événement "registration" (le token FCM) peut arriver avant qu'on
+// l'écoute et le token n'est jamais enregistré sur le profil.
+function setupListeners() {
+  if (listenersReady) return;
+  listenersReady = true;
 
   PushNotifications.addListener("registration", async (token) => {
+    if (!currentUserId) return;
     try {
-      await supabase
+      const { error } = await supabase
         .from("profiles")
-        .update({ pushToken: token.value, pushPlatform: Capacitor.getPlatform() }) // "android" ou "ios"
-        .eq("id", userId);
-    } catch {
-      // silencieux : ne bloque jamais l'app pour un souci d'enregistrement push
+        .update({ pushToken: token.value, pushPlatform: Capacitor.getPlatform() })
+        .eq("id", currentUserId);
+      if (error) console.error("Enregistrement du token push refusé:", error.message);
+    } catch (e) {
+      console.error("Enregistrement du token push échoué:", e);
     }
   });
 
@@ -39,7 +37,41 @@ export async function registerPushNotifications(userId) {
     console.log("Notification reçue (app ouverte):", notification);
   });
 
+  // Tap sur une notification (app en arrière-plan ou fermée) -> ouvre la bonne page.
   PushNotifications.addListener("pushNotificationActionPerformed", (action) => {
-    console.log("Notification tapée:", action.notification);
+    const data = action.notification?.data || {};
+    if (data.type === "message") window.location.assign("/messages");
+    else if (data.type === "subscription" || data.type === "boost") window.location.assign("/abonnement");
   });
+}
+
+// À appeler une fois l'utilisateur connecté (ex: dans NotificationsWatcher).
+export async function registerPushNotifications(userId) {
+  if (!isNativePlatform() || !userId) return;
+  currentUserId = userId;
+
+  setupListeners();
+
+  const perm = await PushNotifications.checkPermissions();
+  if (perm.receive !== "granted") {
+    const req = await PushNotifications.requestPermissions();
+    if (req.receive !== "granted") return; // l'utilisateur a refusé
+  }
+
+  // Canal Android à forte importance : sans lui, les notifications arrivent
+  // en silence, sans bannière, dans un canal "Divers".
+  if (Capacitor.getPlatform() === "android") {
+    try {
+      await PushNotifications.createChannel({
+        id: "messages",
+        name: "Messages et demandes",
+        description: "Nouveaux messages et réponses à vos demandes",
+        importance: 5,
+        visibility: 1,
+        vibration: true,
+      });
+    } catch { /* ignore */ }
+  }
+
+  await PushNotifications.register();
 }

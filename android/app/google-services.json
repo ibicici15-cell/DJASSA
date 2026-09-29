@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:623783526355:android:55696fecb256ee04c7b926",
+        "mobilesdk_app_id": "1:623783526355:android:b32c2101dc50156bc7b926",
         "android_client_info": {
-          "package_name": "Djassa.market"
+          "package_name": "ci.mondjassa.app"
         }
       },
       "oauth_client": [],

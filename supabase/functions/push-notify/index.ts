@@ -113,7 +113,12 @@ async function sendPush(userId: string, title: string, body: string, data: Recor
           Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
-          message: { token, notification: { title, body }, data },
+          message: {
+            token,
+            notification: { title, body },
+            data,
+            android: { priority: "high", notification: { channel_id: "messages" } },
+          },
         }),
       }
     );

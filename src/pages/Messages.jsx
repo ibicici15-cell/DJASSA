@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import {
-  listenConversations, listenMessages, sendMessage, getListing,
+  listenConversations, listenMessages, sendMessage, getListing, getUserName,
   markConversationRead, contactSupport,
 } from "../lib/listings";
 import { useToast } from "../contexts/ToastContext";
@@ -17,6 +17,7 @@ export default function Messages() {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [listingTitles, setListingTitles] = useState({});
+  const [participantNames, setParticipantNames] = useState({});
   const [showSupportForm, setShowSupportForm] = useState(false);
   const [supportText, setSupportText] = useState("");
   const [sendingSupport, setSendingSupport] = useState(false);
@@ -44,6 +45,12 @@ export default function Messages() {
           if (l) setListingTitles((t) => ({ ...t, [c.listing]: l.titre }));
         });
       }
+      const otherId = c.participants?.find((id) => id !== user?.id);
+      if (otherId && !participantNames[otherId]) {
+        getUserName(otherId).then((nom) => {
+          if (nom) setParticipantNames((n) => ({ ...n, [otherId]: nom }));
+        });
+      }
     });
   }, [conversations]);
 
@@ -53,11 +60,21 @@ export default function Messages() {
     return listenMessages(active.id, setMessages);
   }, [active]);
 
+  const [sendingText, setSendingText] = useState(false);
+
   async function handleSend(e) {
     e.preventDefault();
-    if (!text.trim()) return;
-    await sendMessage(active.id, active.listing, active.participants, user.id, text);
-    setText("");
+    if (!text.trim() || sendingText) return;
+    setSendingText(true);
+    const toSend = text;
+    try {
+      await sendMessage(active.id, active.listing, active.participants, user.id, toSend);
+      setText(""); // uniquement vidé si l'envoi a réussi — sinon le texte tapé reste pour ne pas le perdre
+    } catch (err) {
+      showToast(err?.message || "Message non envoyé, réessayez.", "error");
+    } finally {
+      setSendingText(false);
+    }
   }
 
   async function handleSendSupport(e) {
@@ -89,21 +106,40 @@ export default function Messages() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-6 fiche rounded overflow-hidden" style={{ minHeight: "60vh" }}>
-        <div className="border-r border-encre-700/15">
+        <div className={`border-r border-encre-700/15 ${active ? "hidden md:block" : "block"}`}>
           {conversations.length === 0 && <p className="p-4 text-sm text-encre-700/60">Aucune conversation.</p>}
-          {conversations.map((c) => (
-            <button key={c.id} onClick={() => setActive(c)}
-              className={`w-full text-left p-4 border-b border-encre-700/10 hover:bg-sable-100 ${active?.id === c.id ? "bg-sable-100" : ""}`}>
-              <p className="text-sm font-medium truncate">
-                {c.listing ? (listingTitles[c.listing] || "Annonce") : "✉️ Assistance MonDjassa"}
-              </p>
-              <p className="text-xs text-encre-700/60 truncate">{c.lastMessage}</p>
-            </button>
-          ))}
+          {conversations.map((c) => {
+            const otherId = c.participants?.find((id) => id !== user.id);
+            return (
+              <button key={c.id} onClick={() => setActive(c)}
+                className={`w-full text-left p-4 border-b border-encre-700/10 hover:bg-sable-100 ${active?.id === c.id ? "bg-sable-100" : ""}`}>
+                <p className="text-sm font-semibold truncate">
+                  {c.listing ? (participantNames[otherId] || "Utilisateur") : "✉️ Assistance MonDjassa"}
+                </p>
+                {c.listing && (
+                  <p className="text-xs text-ocre-600 truncate">{listingTitles[c.listing] || "Annonce"}</p>
+                )}
+                <p className="text-xs text-encre-700/60 truncate">{c.lastMessage}</p>
+              </button>
+            );
+          })}
         </div>
-        <div className="md:col-span-2 flex flex-col p-4">
+        <div className={`md:col-span-2 flex-col p-4 ${active ? "flex" : "hidden md:flex"}`}>
           {active ? (
             <>
+              <div className="pb-3 mb-3 border-b border-encre-700/10 flex items-center gap-2">
+                <button onClick={() => setActive(null)} className="md:hidden text-encre-700/60 hover:text-ocre-600 -ml-1 p-1" aria-label="Retour à la liste">
+                  ←
+                </button>
+                <div>
+                  <p className="font-semibold text-sm">
+                    {active.listing
+                      ? (participantNames[active.participants?.find((id) => id !== user.id)] || "Utilisateur")
+                      : "✉️ Assistance MonDjassa"}
+                  </p>
+                  {active.listing && <p className="text-xs text-ocre-600">{listingTitles[active.listing] || "Annonce"}</p>}
+                </div>
+              </div>
               <div className="flex-1 space-y-2 overflow-y-auto mb-4">
                 {messages.map((m) => (
                   <div key={m.id} className={`max-w-xs sm:max-w-sm px-3 py-2 rounded text-sm whitespace-pre-line ${m.fromUser === user.id ? "bg-ocre-500 text-sable-50 ml-auto" : "bg-sable-100"}`}>
@@ -114,7 +150,9 @@ export default function Messages() {
               <form onSubmit={handleSend} className="flex gap-2">
                 <input value={text} onChange={(e) => setText(e.target.value)}
                   className="flex-1 border border-encre-700/30 rounded px-3 py-2 text-sm focus-ring bg-sable-50" placeholder="Votre message..." />
-                <button type="submit" className="bg-encre-950 text-sable-50 px-4 rounded text-sm">Envoyer</button>
+                <button disabled={sendingText} type="submit" className="bg-encre-950 text-sable-50 px-4 rounded text-sm disabled:opacity-50">
+                  {sendingText ? "..." : "Envoyer"}
+                </button>
               </form>
             </>
           ) : (

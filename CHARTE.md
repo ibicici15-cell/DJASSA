@@ -16,7 +16,7 @@ Véhicules, Électronique & Informatique, Maison & Ameublement, Mode &
 Habillement, Enfants & Famille, Livres & Éducation, Emploi & Services
 professionnels, Services à la personne, Agriculture, Élevage & Produits
 locaux (matériel, animaux vivants/gibier halal, récoltes brutes non
-transformées), Commerce & Professionnel, Produits islamiques, Sport &
+transformées), Commerce & Professionnel, Sport &
 Loisirs, Art & Artisanat, Beauté & Bien-être, Autres.
 
 ## Articles et activités strictement interdits
