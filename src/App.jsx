@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Capacitor } from "@capacitor/core";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ToastProvider } from "./contexts/ToastContext";
@@ -6,6 +6,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import BottomNav from "./components/BottomNav";
 import HowItWorksIntro from "./components/HowItWorksIntro";
+import SplashAnimation from "./components/SplashAnimation";
+import ScrollManager from "./components/ScrollManager";
 import NotificationsWatcher from "./components/NotificationsWatcher";
 import { RequireAdmin, RequireAuth } from "./components/RouteGuards";
 
@@ -25,12 +27,27 @@ import Messages from "./pages/Messages";
 import Subscription from "./pages/Subscription";
 import AdminDashboard from "./pages/AdminDashboard";
 
+// Pied de page : complet sur le web. Sur Android, seulement sur l'accueil, et
+// toujours avec la place réservée à la barre du bas (fixe, h-16).
+function AppFooter() {
+  const { pathname } = useLocation();
+  if (!Capacitor.isNativePlatform()) return <Footer />;
+  return (
+    <>
+      <div className="pb-16">{pathname === "/" && <Footer />}</div>
+      <BottomNav />
+    </>
+  );
+}
+
 export default function App() {
   return (
     <AuthProvider>
       <ToastProvider>
       <BrowserRouter>
+        <ScrollManager />
         <NotificationsWatcher />
+        <SplashAnimation />
         <HowItWorksIntro />
         <Navbar />
         <main className={"min-h-[80vh]"}>
@@ -53,15 +70,7 @@ export default function App() {
             <Route path="/admin" element={<RequireAdmin><AdminDashboard /></RequireAdmin>} />
           </Routes>
         </main>
-        {Capacitor.isNativePlatform() ? (
-          <>
-            {/* pb-16 : laisse la place à la barre du bas (fixe, h-16) sous le footer */}
-            <div className="pb-16"><Footer /></div>
-            <BottomNav />
-          </>
-        ) : (
-          <Footer />
-        )}
+        <AppFooter />
       </BrowserRouter>
     </ToastProvider>
     </AuthProvider>

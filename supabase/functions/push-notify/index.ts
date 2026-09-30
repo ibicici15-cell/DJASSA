@@ -20,6 +20,30 @@ const supabase = createClient(
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
 
+// Lit le secret FCM_SERVICE_ACCOUNT de façon tolérante : selon le terminal
+// (surtout Windows), les guillemets du JSON sont parfois échappés, doublés ou
+// retirés. On accepte aussi une version encodée en base64.
+function readServiceAccount(): any {
+  let raw = (Deno.env.get("FCM_SERVICE_ACCOUNT") ?? "").trim();
+  if (!raw) throw new Error("secret FCM_SERVICE_ACCOUNT vide ou absent");
+
+  const attempts: Array<() => string> = [
+    () => raw,
+    () => raw.replace(/^['"]|['"]$/g, ""),
+    () => raw.replace(/^['"]|['"]$/g, "").replace(/\\"/g, '"'),
+    () => atob(raw),
+  ];
+  for (const attempt of attempts) {
+    try {
+      const parsed = JSON.parse(attempt());
+      if (parsed && parsed.client_email && parsed.private_key) return parsed;
+    } catch { /* on essaie la variante suivante */ }
+  }
+  throw new Error(
+    "FCM_SERVICE_ACCOUNT illisible (début reçu : " + raw.slice(0, 12).replace(/[\r\n]/g, " ") + "…). Recréez le secret."
+  );
+}
+
 // ---------- Authentification Google (OAuth2 JWT Bearer) pour FCM HTTP v1 ----------
 
 let cachedToken: { value: string; expiresAt: number } | null = null;
@@ -47,7 +71,7 @@ async function getAccessToken(): Promise<string> {
     return cachedToken.value;
   }
 
-  const serviceAccount = JSON.parse(Deno.env.get("FCM_SERVICE_ACCOUNT")!);
+  const serviceAccount = readServiceAccount();
   const now = Math.floor(Date.now() / 1000);
 
   const header = { alg: "RS256", typ: "JWT" };
@@ -102,7 +126,7 @@ async function sendPush(userId: string, title: string, body: string, data: Recor
   if (!token) return "aucun pushToken pour ce destinataire"; // pas d'app mobile / push non activé
 
   try {
-    const serviceAccount = JSON.parse(Deno.env.get("FCM_SERVICE_ACCOUNT")!);
+    const serviceAccount = readServiceAccount();
     const accessToken = await getAccessToken();
     const res = await fetch(
       `https://fcm.googleapis.com/v1/projects/${serviceAccount.project_id}/messages:send`,

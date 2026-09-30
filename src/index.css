@@ -28,3 +28,19 @@ body { @apply bg-sable-50 text-encre-900 font-body; }
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
+
+/* ---- Animation de démarrage (SplashAnimation) ---- */
+@keyframes splash-pop {
+  0%   { opacity: 0; transform: scale(0.7); }
+  55%  { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes splash-rise {
+  0%, 35% { opacity: 0; transform: translateY(8px); }
+  100%    { opacity: 1; transform: translateY(0); }
+}
+.splash-logo { animation: splash-pop 900ms cubic-bezier(.2,.8,.3,1) both; }
+.splash-word { animation: splash-rise 1100ms ease-out both; }
+
+/* ---- Ancres : laisse la place de la barre du haut (sticky) ---- */
+[id], [data-scroll-target] { scroll-margin-top: 5rem; }

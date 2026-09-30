@@ -1,67 +1,105 @@
 import { supabase } from "./supabase";
 import { getBoostPlan, getSubscriptionPlan } from "../data/plans";
 
-// Système de notification simple, sans dépendance à un champ dédié : on
-// retient dans le navigateur (localStorage) la date de la dernière vérification
-// pour cet utilisateur, et on affiche un toast pour chaque demande résolue depuis.
+// Une alerte (demande d'abonnement / de boost traitée) ne doit s'afficher
+// qu'UNE seule fois. On retient la date de la dernière alerte vue :
+//  - dans la base (profiles.notifSeenAt) -> partagée entre le web et Android,
+//    et conservée même si l'app est réinstallée ;
+//  - dans localStorage -> secours si la colonne n'existe pas encore.
+// Première vérification sur un compte sans aucune trace : on ne rejoue pas
+// l'historique, on pose simplement le repère à maintenant.
 function storageKey(userId) {
   return `mondjassa_notif_seen_${userId}`;
 }
 
+let running = false; // évite deux vérifications simultanées (double toast)
+
 export async function checkForNotifications(userId, showToast) {
-  if (!userId || !showToast) return;
-  const lastSeen = localStorage.getItem(storageKey(userId));
-  const lastSeenTime = lastSeen ? new Date(lastSeen).getTime() : 0;
+  if (!userId || !showToast || running) return;
+  running = true;
+  try {
+    await runCheck(userId, showToast);
+  } finally {
+    running = false;
+  }
+}
+
+async function runCheck(userId, showToast) {
+  const local = localStorage.getItem(storageKey(userId));
+  let dbSeen = null;
+  let dbColumnOk = true;
+  try {
+    const { data: me, error } = await supabase.from("profiles").select("notifSeenAt").eq("id", userId).maybeSingle();
+    if (error) dbColumnOk = false;
+    else dbSeen = me?.notifSeenAt || null;
+  } catch {
+    dbColumnOk = false;
+  }
+
+  const candidates = [local, dbSeen].filter(Boolean).map((d) => new Date(d).getTime()).filter((n) => !isNaN(n));
+  const firstRun = candidates.length === 0;
+  const lastSeenTime = firstRun ? Date.now() : Math.max(...candidates);
   let newest = lastSeenTime;
 
-  try {
-    const { data: subs } = await supabase
-      .from("subscriptionRequests")
-      .select("*")
-      .eq("user", userId)
-      .neq("status", "en_attente");
-    for (const r of subs || []) {
-      const t = new Date(r.validatedAt || r.updated).getTime();
-      if (t > lastSeenTime) {
-        const plan = getSubscriptionPlan(r.planId);
-        showToast(
-          r.status === "validee"
-            ? `Votre abonnement "${plan.label}" a été activé ✓`
-            : `Votre demande d'abonnement "${plan.label}" a été refusée.`,
-          r.status === "validee" ? "success" : "error"
-        );
+  if (!firstRun) {
+    try {
+      const { data: subs } = await supabase
+        .from("subscriptionRequests")
+        .select("*")
+        .eq("user", userId)
+        .neq("status", "en_attente");
+      for (const r of subs || []) {
+        const t = new Date(r.validatedAt || r.updated).getTime();
+        if (t > lastSeenTime) {
+          const plan = getSubscriptionPlan(r.planId);
+          showToast(
+            r.status === "validee"
+              ? `Votre abonnement "${plan.label}" a été activé ✓`
+              : `Votre demande d'abonnement "${plan.label}" a été refusée.`,
+            r.status === "validee" ? "success" : "error"
+          );
+        }
+        if (t > newest) newest = t;
       }
-      if (t > newest) newest = t;
+    } catch {
+      // silencieux : les notifications ne doivent jamais bloquer l'app
     }
-  } catch {
-    // silencieux : les notifications ne doivent jamais bloquer l'app
+
+    try {
+      const { data: boosts } = await supabase
+        .from("boostRequests")
+        .select("*")
+        .eq("user", userId)
+        .neq("status", "en_attente");
+      for (const r of boosts || []) {
+        const t = new Date(r.validatedAt || r.updated).getTime();
+        if (t > lastSeenTime) {
+          const plan = getBoostPlan(r.planId);
+          showToast(
+            r.status === "validee"
+              ? `Votre demande de boost (${plan?.label || "boost"}) a été activée ✓`
+              : `Votre demande de boost a été refusée.`,
+            r.status === "validee" ? "success" : "error"
+          );
+        }
+        if (t > newest) newest = t;
+      }
+    } catch {
+      // silencieux
+    }
   }
 
-  try {
-    const { data: boosts } = await supabase
-      .from("boostRequests")
-      .select("*")
-      .eq("user", userId)
-      .neq("status", "en_attente");
-    for (const r of boosts || []) {
-      const t = new Date(r.validatedAt || r.updated).getTime();
-      if (t > lastSeenTime) {
-        const plan = getBoostPlan(r.planId);
-        showToast(
-          r.status === "validee"
-            ? `Votre demande de boost (${plan?.label || "boost"}) a été activée ✓`
-            : `Votre demande de boost a été refusée.`,
-          r.status === "validee" ? "success" : "error"
-        );
+  // On enregistre le repère (première visite incluse) aux deux endroits.
+  if (firstRun || newest > lastSeenTime) {
+    const iso = new Date(newest).toISOString();
+    localStorage.setItem(storageKey(userId), iso);
+    if (dbColumnOk) {
+      try {
+        await supabase.from("profiles").update({ notifSeenAt: iso }).eq("id", userId);
+      } catch {
+        // silencieux
       }
-      if (t > newest) newest = t;
     }
-  } catch {
-    // silencieux
-  }
-
-  if (newest > lastSeenTime) {
-    localStorage.setItem(storageKey(userId), new Date(newest).toISOString());
   }
 }
 

@@ -29,7 +29,7 @@ export default function Login() {
 
   return (
     <div className="max-w-md mx-auto px-4 py-16">
-      <h1 className="font-display text-3xl mb-2">Connexion</h1>
+      <h1 data-scroll-target className="font-display text-3xl mb-2">Connexion</h1>
       <p className="text-encre-700/70 mb-8">Accédez à votre compte pour publier et gérer vos annonces.</p>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

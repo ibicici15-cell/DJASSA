@@ -45,7 +45,7 @@ export default function Signup() {
 
   return (
     <div className="max-w-md mx-auto px-4 py-16">
-      <h1 className="font-display text-3xl mb-2">Créer un compte</h1>
+      <h1 data-scroll-target className="font-display text-3xl mb-2">Créer un compte</h1>
       <p className="text-encre-700/70 mb-8">
         Tout le monde peut publier. {FREE_LISTING_QUOTA} annonces gratuites pour commencer.
       </p>

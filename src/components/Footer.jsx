@@ -7,28 +7,54 @@ import AppLogo from "./AppLogo";
 export default function Footer() {
   const year = new Date().getFullYear();
 
-  // Version compacte pour l'app Android : pas de liste de catégories ni de
-  // numéros de paiement (déjà accessibles dans l'app), juste l'essentiel.
+  // Version allégée pour l'app Android (affichée uniquement sur l'accueil).
   if (Capacitor.isNativePlatform()) {
     return (
-      <footer className="bg-encre-950 text-sable-100/80 mt-10 px-5 py-6 text-center">
-        <p className="font-display text-lg text-sable-50 flex items-center justify-center gap-2 mb-3">
-          <AppLogo size={22} />
-          <span>Mon<span className="text-ocre-400">Djassa</span></span>
-        </p>
-        <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs mb-3">
-          <Link to="/annonces" className="hover:text-sable-50">Annonces</Link>
-          <Link to="/publier" className="hover:text-sable-50">Publier</Link>
-          <Link to="/abonnement#offres" className="hover:text-sable-50">Abonnements & Boost</Link>
-          <Link to="/messages?agence=1" className="text-ocre-400 font-medium">Écrire à l'agence</Link>
+      <footer className="bg-encre-950 text-sable-100/80 mt-10">
+        <div className="px-5 pt-8 pb-6">
+          <p className="font-display text-2xl text-sable-50 mb-2 flex items-center gap-2">
+            <AppLogo size={28} />
+            <span>Mon<span className="text-ocre-400">Djassa</span></span>
+          </p>
+          <p className="text-sm text-sable-100/60 leading-relaxed mb-6">
+            Le marché ivoirien entre particuliers — achetez et vendez directement entre voisins, sans intermédiaire.
+          </p>
+
+          <div className="grid grid-cols-2 gap-6 mb-6">
+            <div>
+              <h3 className="stamp text-xs text-or-400 mb-3">PLATEFORME</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link to="/annonces" className="hover:text-sable-50">Toutes les annonces</Link></li>
+                <li><Link to="/publier" className="hover:text-sable-50">Publier une annonce</Link></li>
+                <li><Link to="/abonnement#offres" className="hover:text-sable-50">Abonnements & Boost</Link></li>
+                <li><Link to="/charte" className="hover:text-sable-50">Charte</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="stamp text-xs text-or-400 mb-3">PAIEMENT & CONTACT</h3>
+              <ul className="space-y-2 text-sm text-sable-100/60">
+                <li>Orange Money : <span className="text-sable-100/90">{PAYMENT_INSTRUCTIONS.orangeMoney}</span></li>
+                <li>MTN Money : <span className="text-sable-100/90">{PAYMENT_INSTRUCTIONS.mtnMoney}</span></li>
+                <li>Wave : <span className="text-sable-100/90">{PAYMENT_INSTRUCTIONS.wave}</span></li>
+                <li className="pt-1">
+                  <Link to="/messages?agence=1" className="text-ocre-400 font-medium">✉️ Écrire à l'agence</Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <p className="text-xs leading-relaxed text-sable-100/40">
+            MonDjassa met en relation des particuliers et n'intervient pas dans les transactions. Vérifiez toujours
+            l'article avant de payer et privilégiez une remise en main propre.
+          </p>
         </div>
-        <p className="text-[10px] leading-snug text-sable-100/40 mb-3">
-          MonDjassa met en relation des particuliers et n'intervient pas dans les transactions.
-          Vérifiez l'article avant de payer et privilégiez la remise en main propre.
-        </p>
-        <p className="text-[10px] text-sable-100/40">
-          © {year} MonDjassa · Fait avec soin pour la Côte d'Ivoire 🇨🇮
-        </p>
+
+        <div className="border-t border-encre-700/60 px-5 py-4 text-xs text-sable-100/40 text-center">
+          <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="mb-3 text-sable-100/70 border border-encre-700/60 rounded-full px-4 py-1.5">↑ Haut de page</button>
+          <p>© {year} MonDjassa. Tous droits réservés.</p>
+          <p className="mt-1">Fait avec soin pour la Côte d'Ivoire 🇨🇮</p>
+        </div>
       </footer>
     );
   }
@@ -96,6 +122,8 @@ export default function Footer() {
       <div className="border-t border-encre-700/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-sable-100/40">
           <p>© {year} MonDjassa. Tous droits réservés.</p>
+          <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="text-sable-100/60 hover:text-sable-50">↑ Haut de page</button>
           <p>Fait avec soin pour la Côte d'Ivoire 🇨🇮</p>
         </div>
       </div>

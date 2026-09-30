@@ -1,7 +1,13 @@
 export default function Charte() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-16">
-      <h1 className="font-display text-3xl mb-6">Charte MonDjassa</h1>
+      <h1 className="font-display text-3xl mb-4">Charte MonDjassa</h1>
+      <nav className="flex flex-wrap gap-2 mb-8 text-sm">
+        <a href="#interdits" className="px-3 py-1 rounded-full bg-sable-100 hover:bg-encre-950/10">Interdits</a>
+        <a href="#sanctions" className="px-3 py-1 rounded-full bg-sable-100 hover:bg-encre-950/10">Sanctions</a>
+        <a href="#role" className="px-3 py-1 rounded-full bg-sable-100 hover:bg-encre-950/10">Notre rôle</a>
+      </nav>
+
 
       <p className="text-encre-700/80 mb-6 leading-relaxed">
         MonDjassa est une plateforme de petites annonces entre particuliers en Côte d'Ivoire,
@@ -12,7 +18,7 @@ export default function Charte() {
         accessoires de maison (tables, chaises, décoration...) restent également autorisés.
       </p>
 
-      <h2 className="font-display text-xl mb-3">Articles et activités strictement interdits</h2>
+      <h2 id="interdits" className="font-display text-xl mb-3">Articles et activités strictement interdits</h2>
       <ul className="list-disc pl-5 space-y-1.5 text-encre-700/80 mb-6">
         <li>Alcool et tout produit dérivé</li>
         <li>Porc et tout produit dérivé</li>
@@ -29,7 +35,7 @@ export default function Charte() {
         <li>Animaux ou espèces dont la vente est interdite par la loi ivoirienne</li>
       </ul>
 
-      <h2 className="font-display text-xl mb-3">Sanctions</h2>
+      <h2 id="sanctions" className="font-display text-xl mb-3">Sanctions</h2>
       <p className="text-encre-700/80 mb-2 leading-relaxed">
         Toute annonce non conforme à cette charte est retirée. Le compte concerné reçoit un
         <b> premier avertissement</b> détaillant le motif. En cas de <b>récidive</b>, le compte est
@@ -40,7 +46,7 @@ export default function Charte() {
         abusifs...) suit la même règle : avertissement, puis blocage en cas de récidive.
       </p>
 
-      <h2 className="font-display text-xl mb-3">Ce que MonDjassa n'est pas</h2>
+      <h2 id="role" className="font-display text-xl mb-3">Ce que MonDjassa n'est pas</h2>
       <p className="text-encre-700/80 leading-relaxed">
         MonDjassa met en relation acheteurs et vendeurs ; la plateforme n'est pas partie aux
         transactions et n'intervient pas dans la vente des articles publiés. Inspectez toujours

@@ -42,7 +42,7 @@ export default function ResetPassword() {
 
   return (
     <div className="max-w-md mx-auto px-4 py-16">
-      <h1 className="font-display text-3xl mb-2">Nouveau mot de passe</h1>
+      <h1 data-scroll-target className="font-display text-3xl mb-2">Nouveau mot de passe</h1>
       {done ? (
         <p className="text-indigo-600 text-sm">Mot de passe changé ✓ Redirection vers la connexion...</p>
       ) : (

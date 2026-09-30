@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Logo MonDjassa (sac) pour l'écran de démarrage Android 12+ -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="288dp"
+    android:height="288dp"
+    android:viewportWidth="288"
+    android:viewportHeight="288">
+    <group
+        android:translateX="57.6"
+        android:translateY="54.4"
+        android:scaleX="1.6"
+        android:scaleY="1.6">
+        <path
+            android:pathData="M 40 45 L 40 36 C 40 29.5 44.5 24 50 24"
+            android:strokeColor="#EDE4D3"
+            android:strokeWidth="4.2"
+            android:strokeLineCap="round" />
+        <path
+            android:pathData="M 68 45 L 68 36 C 68 29.5 63.5 24 58 24"
+            android:strokeColor="#EDE4D3"
+            android:strokeWidth="4.2"
+            android:strokeLineCap="round" />
+        <group>
+            <clip-path android:pathData="M 25 42 L 83 42 L 78 83 C 77.5 86.5 74.5 89 71 89 L 37 89 C 33.5 89 30.5 86.5 30 83 Z" />
+            <path android:pathData="M 25 42 L 45 42 L 45 90 L 25 90 Z" android:fillColor="#F77F00" />
+            <path android:pathData="M 45 42 L 63 42 L 63 90 L 45 90 Z" android:fillColor="#FFFFFF" />
+            <path android:pathData="M 63 42 L 83 42 L 83 90 L 63 90 Z" android:fillColor="#009E60" />
+        </group>
+        <path
+            android:pathData="M 25 42 L 83 42 L 78 83 C 77.5 86.5 74.5 89 71 89 L 37 89 C 33.5 89 30.5 86.5 30 83 Z"
+            android:strokeColor="#14283A"
+            android:strokeWidth="1.8" />
+    </group>
+</vector>
